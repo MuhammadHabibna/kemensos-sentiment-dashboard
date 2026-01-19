@@ -40,6 +40,15 @@ const WORDCLOUD_OPTIONS: any = {
     padding: 2,
 };
 
+const normalizeSentiment = (s: any): "Positive" | "Neutral" | "Negative" | "" => {
+    if (!s) return "";
+    const v = String(s).trim().toLowerCase();
+    if (v === "positive") return "Positive";
+    if (v === "neutral") return "Neutral";
+    if (v === "negative") return "Negative";
+    return "";
+};
+
 export function WordCloudTab({ data, filters, onTermClick }: WordCloudTabProps) {
     const [ngram, setNgram] = React.useState<1 | 2 | 3>(1);
 
@@ -61,6 +70,7 @@ export function WordCloudTab({ data, filters, onTermClick }: WordCloudTabProps) 
     const [modalOpen, setModalOpen] = React.useState(false);
     const [sourceDataForModal, setSourceDataForModal] = React.useState<RowData[]>([]);
     const [modalColor, setModalColor] = React.useState(SENTIMENT_COLORS.Neutral);
+    const [modalSentiment, setModalSentiment] = React.useState<"Positive" | "Neutral" | "Negative" | null>(null);
 
     // Mount check
     React.useEffect(() => {
@@ -130,8 +140,15 @@ export function WordCloudTab({ data, filters, onTermClick }: WordCloudTabProps) 
         if (!text) return;
 
         setSelectedTerm(text);
-        setSourceDataForModal(data || []);
+
+        // Filter dataset BEFORE passing to modal
+        const sentimentRows = (data || []).filter(
+            (r) => normalizeSentiment(r?.sentiment) === sentimentCategory
+        );
+
+        setSourceDataForModal(sentimentRows);
         setModalColor(SENTIMENT_COLORS[sentimentCategory]);
+        setModalSentiment(sentimentCategory);
         setModalOpen(true);
         // if (onTermClick) onTermClick(text);
     };
@@ -344,6 +361,7 @@ export function WordCloudTab({ data, filters, onTermClick }: WordCloudTabProps) 
                 term={selectedTerm || ''}
                 data={sourceDataForModal}
                 sentimentColor={modalColor}
+                sentiment={modalSentiment}
             />
 
         </motion.div>

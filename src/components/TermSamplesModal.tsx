@@ -14,9 +14,19 @@ interface TermSamplesModalProps {
     term: string;
     data: RowData[];
     sentimentColor: string;
+    sentiment?: 'Positive' | 'Neutral' | 'Negative' | null;
 }
 
-export function TermSamplesModal({ isOpen, onClose, term, data, sentimentColor }: TermSamplesModalProps) {
+const normalizeSentiment = (s: any): "Positive" | "Neutral" | "Negative" | "" => {
+    if (!s) return "";
+    const v = String(s).trim().toLowerCase();
+    if (v === "positive") return "Positive";
+    if (v === "neutral") return "Neutral";
+    if (v === "negative") return "Negative";
+    return "";
+};
+
+export function TermSamplesModal({ isOpen, onClose, term, data, sentimentColor, sentiment }: TermSamplesModalProps) {
     const [sourceFilter, setSourceFilter] = React.useState<string>('All');
     const [topicFilter, setTopicFilter] = React.useState<string>('All');
     const [showAspect2, setShowAspect2] = React.useState<boolean>(false);
@@ -34,13 +44,21 @@ export function TermSamplesModal({ isOpen, onClose, term, data, sentimentColor }
     // 1. Find all rows containing the term (searching in readable text)
     const matchedRows = React.useMemo(() => {
         if (!term || !data) return [];
+
+        let rowsToSearch = data;
+
+        // Double-Guard: Filter by sentiment if provided
+        if (sentiment) {
+            rowsToSearch = data.filter(r => normalizeSentiment(r?.sentiment) === sentiment);
+        }
+
         const lowerTerm = term.toLowerCase();
-        return data.filter(row => {
+        return rowsToSearch.filter(row => {
             const txt = getReadableText(row);
             if (!txt) return false;
             return txt.toLowerCase().includes(lowerTerm);
         });
-    }, [data, term]);
+    }, [data, term, sentiment]);
 
     // 2. Compute available topics
     const availableTopics = React.useMemo(() => {
