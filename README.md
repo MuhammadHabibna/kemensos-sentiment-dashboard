@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Public Sentiment Viewer (Analisis Sentiment Kemensos)
 
-## Getting Started
+A modern, interactive web dashboard for visualizing and analyzing public sentiment data (TikTok & YouTube) regarding Kemensos. Built with Next.js, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## 🚀 Key Features
+
+### 1. 📊 Interactive Dashboard
+- **KPI Metrics**: Real-time summary of Positive, Neutral, and Negative sentiment distribution.
+- **Trend Analysis**: Stacked Area Chart showing comment volume trends over time, broken down by sentiment.
+- **Top Insights**: Visual ranking of the most discussed **Topics** and **Aspects** (Issues).
+- **Public Sentiment Gauge**: A visual gauge showing the dominant sentiment index.
+
+### 2. ☁️ Advanced WordCloud (Strict Mode)
+- **Dual Visualization**: View terms as an interactive Word Cloud or a Top 10 Bar Chart.
+- **Strict Data Processing**: Uses offline-preprocessed text (`Text_rf_nostop`) to ensure **zero stopwords** appear in the cloud.
+- **Contextual Samples**: Click any word or bar to open a detailed **Modal** showing actual comment samples containing that term.
+- **Readability**: While the cloud is generated from cleaned text, the samples display the *original readable text*, with the search term **highlighted**.
+
+### 3. 🔎 Data Exploration
+- **Filtering**: Global filters for Date Range, Source (TikTok/YouTube), Sentiment, Topic, and Aspects.
+- **Search**: Full-text search capability.
+- **Explore Tab**: A paginated, tabular view of the raw dataset with detailed columns.
+
+### 4. 🎨 Modern UI/UX
+- **Glassmorphism**: Premium "frosted glass" cards (`backdrop-blur`) on a subtle gradient background.
+- **Responsive**: Fully optimized for Desktop and Mobile layouts.
+- **Animations**: Smooth transitions using Framer Motion.
+
+---
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+├── public/
+│   ├── data/                 # Dataset files (05_Final Datasets.csv)
+│   └── stopwords/            # Stopword lists (id.txt)
+├── src/
+│   ├── app/                  # Next.js App Router (Layout, Page, Global CSS)
+│   ├── components/
+│   │   ├── dashboard/        # Sub-components for the Dashboard tab
+│   │   ├── ui/               # Reusable UI components (shadcn/ui compatible)
+│   │   ├── DashboardTab.tsx  # Main Dashboard logic & layout
+│   │   ├── WordCloudTab.tsx  # WordCloud logic, strict text handling, & charts
+│   │   ├── ExploreTab.tsx    # Tabular data view
+│   │   └── TermSamplesModal.tsx # Modal for displaying term contexts
+│   └── lib/
+│       ├── aggregations.ts   # Logic for calculating KPIs, trends, and lists
+│       ├── dataLoader.ts     # CSV parsing and type safety
+│       ├── nlp.ts            # Tokenization and N-gram utilities
+│       ├── types.ts          # TypeScript interfaces (RowData, Filters)
+│       └── utils.ts          # Styles utility (cn)
+├── tailwind.config.ts        # Tailwind CSS configuration
+└── package.json              # Project dependencies
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + `tailwindcss-animate`
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **Parsing**: PapaParse (CSV)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🏃‍♂️ Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
+    Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Build for Production**:
+    ```bash
+    npm run build
+    npm start
+    ```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Recent Updates
+- **Visual Clarity**: Implemented a "Stacked Area Chart" for sentiment trends to prevent misleading comparisons.
+- **Strict WordCloud**: Removed client-side stopword processing in favor of a strictly pre-processed column to ensure accuracy.
+- **UI Polish**: Enhanced global styling with a stronger gradient background and improved visual hierarchy.

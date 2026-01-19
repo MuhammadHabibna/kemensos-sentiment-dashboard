@@ -119,9 +119,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply text-foreground;
-    background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 50%, #eff6ff 100%);
+    background-color: #f0f9ff;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0) 0, transparent 50%),
+      /* Vector-like Grid */
+      linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    background-attachment: fixed;
     min-height: 100vh;
   }
 }
